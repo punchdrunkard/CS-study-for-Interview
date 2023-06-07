@@ -82,6 +82,7 @@ ex) C 클래스 예시 (Subnetting + CIDR 표기)
 <p align="center"><img width="700" alt="image" src="https://github.com/voka/Problem-Solving/assets/38587274/458c6ad9-d279-45c4-939f-7f37d8ed23f0"></p>
 - 반대로 외부에서 접근하는 경우 어떻게 될까 ? 
 	-  공유기는 내부의 어떤 장치에게 Packet을 전달해야 하는지 몰라 Drop 시킨다. -> 방화벽 역할도 수행
+
 - 그림 출처 (널널한 개발자)
 	https://www.youtube.com/watch?v=7BvzxbG4y3Y
 
