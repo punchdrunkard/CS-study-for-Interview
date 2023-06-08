@@ -74,7 +74,7 @@ ex) C 클래스 예시 (Subnetting + CIDR 표기)
 
 ### 4.1 Subnetting
 
-### 4.2 Private IP와 NAT(Network Address Translation) - 공유기
+### 4.2.1 Private IP와 NAT(Network Address Translation) - 공유기
 
 <img width="1000" alt="image" src="https://github.com/voka/Problem-Solving/assets/38587274/cc8171c7-9c46-4513-923d-e7a2ddf695e9">
 (2) -> (3) : Outbound
@@ -84,27 +84,35 @@ ex) C 클래스 예시 (Subnetting + CIDR 표기)
 	-  공유기는 내부의 어떤 장치에게 Packet을 전달해야 하는지 몰라 Drop 시킨다. -> 방화벽 역할도 수행
 
 - 그림 출처 (널널한 개발자)
-	https://www.youtube.com/watch?v=7BvzxbG4y3Y
+  https://www.youtube.com/watch?v=7BvzxbG4y3Y
 
-### 4.3 DHCP(Dynamic Host Configuration Protocol) 서버 - 공유기 내장
+### 4.2.2 DHCP(Dynamic Host Configuration Protocol) 서버 - 공유기 내장
 
 - 호스트의 IP주소와 각종 TCP/IP 프로토콜의 기본 설정을 클라이언트(내부 장치들)에게 DHCP를 사용해 자동적으로 제공해주는 서버를 말합니다. (간단히 말하면 내부 장치들이 네트워크에 접속할 수 있게 Private 주소 및 TCP/IP 설정 해주는 서버)
+
 - IP 주소와 함께 유효한 시간을 알려줌 (사용자가 설정 가능) + **클라이언트와 연결된 기본 게이트웨이**(컴퓨터가 처음 접속할 때 맨 처음 거치게 되는 라우터)와 Local DNS 서버 주소
+
 - 7계층 프로토콜이며 UDP를 실제 전송에 사용한다.
+
 - 임대기간 이후에도 계속 해당 IP 주소를 사용하고자 한다면 IP 주소 임대기간 연장(IP Address Renewal)을 DHCP 서버에 요청해야 하고 또한 단말은 임대 받은 IP 주소가 더 이상 필요치 않게 되면 IP 주소 반납 절차(IP Address Release)를 수행하게 됩니다.
+
 - DHCP 장점
   - PC의 수가 많거나 PC 자체 변동사항이 많은 경우 IP 설정이 자동으로 되기 때문에 효율적으로 사용 가능하고, IP를 자동으로 할당해주기 때문에 IP 충돌을 막을 수 있습니다.
 - DHCP 단점
   - DHCP 서버에 의존되기 때문에 서버가 다운되면 IP 할당이 제대로 이루어지지 않습니다.
 
-#### 4.3.1 DHCP 서버와 클라이언트간 DHCP를 이용한 통신과정
+#### 4.2.3 DHCP 서버와 클라이언트간 DHCP 프로토콜을 이용한 통신과정
 
 - Discover 과정
   - Client는 DHCP 서버의 주소를 모르기 떄문에 Broadcast 통신을 하게 된다. -> 빠른 통신 속도 + 연결이 필요 없는 통신 -> UDP 사용 이유.
 - Offer 과정
+
   - DHCP가 브로드캐스트 메세지를 받으면 클라이언트에게 서버 자신의 IP 주소를 알려준다. 이와 함께 클라이언트가 사용할 IP주소, DNS 정보, IP 주소의 사용 시간(Lease Time)을 전달한다. 그런데, 이 DHCP 서버 또한 클라이언트의 주소를 알지 못하여 메세지를 보낼 수 없다.(아직 IP 주소 할당이 안됐다!) 그렇기 때문에 마찬가지로 브로드캐스팅하여 이 정보를 사방으로 뿌린다.
+
 - Request 과정
+
   - DHCP 서버로부터 제안받은 IP 주소와 DHCP 서버 정보를 포함한 DHCP 요청 메시지를 브로드캐스트로 전송 -> DHCP 서버 여러대 존재할 수 있으며 DHCP Offer 메시지를 보내면서 해당 단말에 할당해 줄 IP 주소와 기타 정보를 내부적으로 저장해 놓기 때문에 선택 받지 못한 DHCP 서버들이 이 IP 주소와 기타 정보들을 삭제할 수 있도록 하기 위함이다
+
 - ACK 과정
   - DHCP 클라이언트로부터 IP 주소를 사용하겠다는 요청을 받으면 DHCP 서버에 해당 IP를 어떤 클라이언트가 언제부터 사용하기 시작했는지 정보를 기록하고 DHCP Request 메시지를 정상적으로 수신했다는 응답을 전송
   - (DHCP 메시지 내에 Broadcast Flag가 존재하는 이유는 단말의 TCP/IP 구현 특성에 기인한다. 어떤 단말은 DHCP Ack 메시지를 통해 최종적으로 IP 주소를 할당 받기 전까지는 해당 IP 주소를 목적지로 하는 유니캐스트 패킷을 수신할 수 없으며 이 경우 단말은 DHCP Discover/ Request 메시지를 보낼 때 Broadcast Flag=1로 하는 것이고, 만약 IP 주소를 할당 받기 전에도 유니캐스트 패킷을 수신 할 수 있는 단말(Windows의 경우)은 Broadcast Flag=0으로 설정하는 것이다)
